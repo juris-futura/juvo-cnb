@@ -1,4 +1,4 @@
-FROM ubuntu:jammy as base
+FROM python:3.11-slim-bookworm as base
 
 # Each stack needs an identifier. This is used by the CNB framework to
 # determine compatibility among components, for example, matching the build
@@ -20,6 +20,8 @@ RUN apt-get update && \
   apt-get install -y ca-certificates && \
   rm -rf /var/lib/apt/lists/*
 
+RUN pip install poetry==1.8.2
+
 # BUILD IMAGE
 FROM base as build
 
@@ -27,7 +29,7 @@ RUN apt-get update && \
   apt-get install -y git && \
   rm -rf /var/lib/apt/lists/*
 
-LABEL io.buildpacks.stack.mixins="[\"build:wget\", \"build:git\"]"
+LABEL io.buildpacks.stack.mixins="[\"build:git\"]"
 
 # we set the active user for the image employing the environment variables
 # declared in the base image.

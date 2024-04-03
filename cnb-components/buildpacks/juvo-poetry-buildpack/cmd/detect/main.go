@@ -1,0 +1,10 @@
+package main
+
+import (
+	"github.com/juris-futura/juvo-poetry-buildpack/poetry"
+	"github.com/paketo-buildpacks/packit"
+)
+
+func main() {
+	packit.Detect(poetry.Detect())
+}

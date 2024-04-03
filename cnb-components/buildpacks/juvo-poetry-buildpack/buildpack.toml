@@ -1,0 +1,17 @@
+# Indicates compatibility version with lifecycle
+api = "0.10"
+
+# General metadata about the buildpack that is used be the lifecycle
+[buildpack]
+  id = "com.jurisfutura/juvo-poetry"
+  version = "0.0.1"
+
+[[targets]]
+  os = "linux"
+  arch = "amd64"
+
+[metadata]
+  [[metadata.dependencies]]
+    name = "poetry"
+    version = "1.8.2"
+
