@@ -3,7 +3,6 @@ package poetry
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
@@ -55,8 +54,11 @@ func Build() packit.BuildFunc {
 		poetryLayer.Launch = true
 
 		fmt.Println("Installing Virtual Env . . .")
-		err = installVenv(poetryLayer.Path)
-		if err != nil {
+		var poetryInstall = PoetryInstall{
+			OnlyMain:    true,
+			KeyFilePath: "/platform/bindings/git/id_rsa",
+		}
+		if err = ExecuteStep(poetryInstall); err != nil {
 			return packit.BuildResult{}, err
 		}
 
@@ -64,40 +66,6 @@ func Build() packit.BuildFunc {
 			Layers: []packit.Layer{poetryLayer},
 		}, nil
 	}
-}
-
-func installVenv(path string) error {
-	privKey := os.Getenv("PRIV_SSH_ID")
-
-	filename := filepath.Join(path, "priv_id")
-
-	fd, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer fd.Close()
-	defer os.Remove(filename)
-
-	_, err = fd.WriteString(fmt.Sprintf("%s\n", privKey))
-	if err != nil {
-		return err
-	}
-	err = fd.Chmod(0600)
-	if err != nil {
-		return err
-	}
-	var gitCmd = fmt.Sprintf("GIT_SSH_COMMAND=ssh -i %s -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -F /dev/null", filename)
-
-	cmd := exec.Command("poetry", "install", "--only=main")
-	cmd.Env = os.Environ()
-	cmd.Env = append(cmd.Env, gitCmd)
-	return RunCmd(cmd)
-}
-
-func RunCmd(cmd *exec.Cmd) error {
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
 }
 
 func readPoetryVersion(m Deps) (string, error) {
