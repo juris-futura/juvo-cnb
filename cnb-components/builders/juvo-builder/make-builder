@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -euo pipefail
 
 function errxit() {
@@ -20,12 +19,22 @@ function get-docker-password() {
   base64 -d
 }
 
+TAG=latest
+set +u
+if [ "$1" != "" ]; then
+  TAG=$1
+fi
+set -u
+
 get-docker-password |
 docker login -u jurisfuturasb --password-stdin
 
-for i in build run; do
-  artifact="jurisfutura/juvo-cnb-$i"
-  docker buildx build . -t $artifact --target $i
-  docker push $artifact
+for TARGET in build run; do
+  ARTIFACT="jurisfutura/juvo-cnb-$TARGET:$TAG"
+  docker buildx build . -t $ARTIFACT --target $TARGET
+  docker push $ARTIFACT
 done
 
+BUILDER_IMAGE="jurisfutura/juvo-builder:$TAG"
+pack builder create $BUILDER_IMAGE --config ./builder.toml
+docker push $BUILDER_IMAGE
