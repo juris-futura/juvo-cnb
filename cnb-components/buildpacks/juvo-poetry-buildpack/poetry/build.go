@@ -33,10 +33,22 @@ func Build() packit.BuildFunc {
 		poetryLayer.Launch = true
 
 		fmt.Println("Installing Virtual Env . . .")
-		var poetryInstall = PoetryInstall{
-			OnlyMain:    true,
-			KeyFilePath: "/platform/bindings/git/id_rsa",
+
+		poetryConfig := CommandDescriptor{
+			Cmd:  "poetry",
+			Args: []string{"config", "virtualenvs.in-project", "true"},
 		}
+
+		if err = ExecuteStep(poetryConfig); err != nil {
+			return packit.BuildResult{}, err
+		}
+
+		var poetryInstall = PoetryInstall{
+			OnlyMain:       true,
+			KeyFilePath:    "/platform/bindings/git/id_rsa",
+			FallbackEnvVar: "PRIV_SSH_KEY",
+		}
+
 		if err = ExecuteStep(poetryInstall); err != nil {
 			return packit.BuildResult{}, err
 		}

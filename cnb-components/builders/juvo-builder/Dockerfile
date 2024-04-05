@@ -21,6 +21,7 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 RUN pip install poetry==1.8.2
+RUN poetry config virtualenvs.in-project true
 
 # BUILD IMAGE
 FROM base as build
@@ -38,4 +39,6 @@ USER ${CNB_USER_ID}:${CNB_GROUP_ID}
 
 # RUN IMAGE
 FROM base as run
+
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
+
