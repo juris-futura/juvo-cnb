@@ -1,5 +1,5 @@
 # Indicates compatibility version with lifecycle
-api = "0.10"
+api = "0.9"
 
 # General metadata about the buildpack that is used be the lifecycle
 [buildpack]

@@ -1,7 +1,7 @@
 [build]
-image = "jurisfutura/juvo-cnb-build:v0.1"
+image = "jurisfutura/juvo-cnb-build:v0.2"
 
 [run]
 [[run.images]]
-image = "jurisfutura/juvo-cnb-run:v0.1"
+image = "jurisfutura/juvo-cnb-run:v0.2"
 

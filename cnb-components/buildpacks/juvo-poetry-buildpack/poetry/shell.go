@@ -16,6 +16,10 @@ type Executable interface {
 	MkCmd() (CommandDescriptor, error)
 }
 
+func (ctx CommandDescriptor) MkCmd() (CommandDescriptor, error) {
+	return ctx, nil
+}
+
 func ExecuteStep(e Executable) error {
 	var cd, err = e.MkCmd()
 	if err != nil {
@@ -28,6 +32,10 @@ func ExecuteStep(e Executable) error {
 		fmt.Println(envvar)
 		cmd.Env = append(cmd.Env, envvar)
 	}
+	return ExecuteCommand(cmd)
+}
+
+func ExecuteCommand(cmd *exec.Cmd) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
