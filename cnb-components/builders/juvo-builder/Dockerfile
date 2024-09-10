@@ -13,6 +13,7 @@ LABEL io.buildpacks.stack.id="com.jurisfutura.cnb.stacks.ubuntu"
 # security and helps prevent permissions problems within the final application image.
 ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
+ENV CNB_PLATFORM_API=0.11
 RUN groupadd cnb --gid ${CNB_GROUP_ID} && \
  useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
 
