@@ -13,7 +13,12 @@
 
 ### Buildpack
 
-
+1. Install [go](https://go.dev/doc/install)
+1. Run
+   ```
+   cd cnb-components/buildpacks/juvo-poetry-buildpack
+   ./build.sh
+   ```
 
 ## Maintainers
 
