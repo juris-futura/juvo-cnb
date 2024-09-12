@@ -35,6 +35,15 @@ for TARGET in build run; do
   docker push $ARTIFACT
 done
 
+cat << EOF > ./builder.toml
+[build]
+image = "jurisfutura/juvo-cnb-build:$TAG"
+
+[run]
+[[run.images]]
+image = "jurisfutura/juvo-cnb-run:$TAG"
+EOF
+
 BUILDER_IMAGE="jurisfutura/juvo-builder:$TAG"
 pack builder create $BUILDER_IMAGE --config ./builder.toml
 docker push $BUILDER_IMAGE

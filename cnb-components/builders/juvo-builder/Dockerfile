@@ -1,4 +1,4 @@
-FROM python:3.11-slim-bookworm as base
+FROM debian:bookworm AS base
 
 # Each stack needs an identifier. This is used by the CNB framework to
 # determine compatibility among components, for example, matching the build
@@ -20,11 +20,8 @@ RUN apt-get update && \
     apt-get install -y ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install poetry==1.8.2
-RUN poetry config virtualenvs.in-project true
-
 # BUILD IMAGE
-FROM base as build
+FROM base AS build
 
 RUN apt-get update && \
     apt-get install -y git && \
@@ -37,7 +34,7 @@ LABEL io.buildpacks.stack.mixins="[\"build:git\"]"
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
 
 # RUN IMAGE
-FROM base as run
+FROM base AS run
 
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
 
