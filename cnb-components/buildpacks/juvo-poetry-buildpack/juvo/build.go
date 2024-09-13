@@ -1,36 +1,24 @@
-package poetry
+package juvo
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"github.com/paketo-buildpacks/packit"
 )
 
 func Build() packit.BuildFunc {
 	return func(ctx packit.BuildContext) (packit.BuildResult, error) {
-		// Read the content of buildpack.toml. Well find poetry dep there
-		var input = MetaInput{
-			BuildpackMetadataPath: filepath.Join(ctx.CNBPath, "buildpack.toml"),
-		}
-		fmt.Println("Fetching Poetry Version . . .")
-		poetryVersion, err := input.ReadMetadata()
-		if err != nil {
-			return packit.BuildResult{}, err
-		}
-		fmt.Printf("Poetry Version: %s\n", poetryVersion)
-
-		poetryLayer, err := ctx.Layers.Get("poetry")
+		juvoLayer, err := ctx.Layers.Get("juvo")
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
 
-		poetryLayer, err = poetryLayer.Reset()
+		juvoLayer, err = juvoLayer.Reset()
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
 
-		poetryLayer.Launch = true
+		juvoLayer.Launch = true
 
 		fmt.Println("Installing Virtual Env . . .")
 
@@ -54,7 +42,7 @@ func Build() packit.BuildFunc {
 		}
 
 		return packit.BuildResult{
-			Layers: []packit.Layer{poetryLayer},
+			Layers: []packit.Layer{juvoLayer},
 		}, nil
 	}
 }

@@ -1,4 +1,4 @@
-package poetry
+package juvo
 
 import (
 	"fmt"
