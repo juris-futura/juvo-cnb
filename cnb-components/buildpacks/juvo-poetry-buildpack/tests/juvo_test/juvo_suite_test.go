@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestPoetry(t *testing.T) {
+func TestJuvo(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Poetry Suite")
 }
