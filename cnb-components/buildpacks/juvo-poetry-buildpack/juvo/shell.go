@@ -27,6 +27,7 @@ func ExecuteStep(e Executable) error {
 	}
 	var cmd = exec.Command(cd.Cmd, cd.Args...)
 	cmd.Env = os.Environ()
+
 	for k, v := range cd.Env {
 		var envvar = fmt.Sprintf("%s=%s", k, v)
 		fmt.Println(envvar)

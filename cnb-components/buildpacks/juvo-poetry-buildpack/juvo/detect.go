@@ -7,6 +7,12 @@ import (
 	"github.com/paketo-buildpacks/packit"
 )
 
+type Metadata struct {
+	Build   bool   `toml:"build"`
+	Launch  bool   `toml:"launch"`
+	Version string `toml:"version"`
+}
+
 func Detect(fs Fs) packit.DetectFunc {
 	shouldDetect := func(workdir string) error {
 		path := filepath.Join(workdir, "pyproject.toml")
@@ -24,7 +30,20 @@ func Detect(fs Fs) packit.DetectFunc {
 
 		requires := []packit.BuildPlanRequirement{
 			{
+				Name: "cpython",
+				Metadata: Metadata{
+					// Version: "3.12.0", // use pyproject version
+					Build:  true,
+					Launch: true,
+				},
+			},
+			{
 				Name: "poetry",
+				Metadata: Metadata{
+					Version: "1.8.2",
+					Build:   true,
+					Launch:  true,
+				},
 			},
 			{
 				Name: "juvo",

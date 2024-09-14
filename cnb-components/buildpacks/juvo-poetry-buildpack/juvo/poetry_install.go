@@ -22,7 +22,7 @@ func (install PoetryInstall) MkCmd() (CommandDescriptor, error) {
 	var envSshCmd = fmt.Sprintf("ssh -i %s -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -F /dev/null", keyfile)
 	env["GIT_SSH_COMMAND"] = envSshCmd
 
-	var args = []string{"install"}
+	var args = []string{"install", "--no-root"}
 	if install.OnlyMain {
 		args = append(args, "--only=main")
 	}

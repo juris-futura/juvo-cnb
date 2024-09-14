@@ -8,17 +8,10 @@ import (
 
 func Build() packit.BuildFunc {
 	return func(ctx packit.BuildContext) (packit.BuildResult, error) {
-		juvoLayer, err := ctx.Layers.Get("juvo")
+		juvoLayer, err := LaunchLayer(ctx, "juvo")
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
-
-		juvoLayer, err = juvoLayer.Reset()
-		if err != nil {
-			return packit.BuildResult{}, err
-		}
-
-		juvoLayer.Launch = true
 
 		fmt.Println("Installing Virtual Env . . .")
 
@@ -42,7 +35,20 @@ func Build() packit.BuildFunc {
 		}
 
 		return packit.BuildResult{
-			Layers: []packit.Layer{juvoLayer},
+			Layers: []packit.Layer{*juvoLayer},
 		}, nil
 	}
+}
+
+func LaunchLayer(ctx packit.BuildContext, layerName string) (*packit.Layer, error) {
+	layer, err := ctx.Layers.Get(layerName)
+	if err != nil {
+		return nil, err
+	}
+	layer, err = layer.Reset()
+	if err != nil {
+		return nil, err
+	}
+	layer.Launch = true
+	return &layer, nil
 }
