@@ -2,7 +2,7 @@ package juvo
 
 import (
 	"fmt"
-	"os"
+	"io"
 
 	"github.com/BurntSushi/toml"
 )
@@ -16,26 +16,15 @@ type Deps struct {
 	} `toml:"metadata"`
 }
 
-type MetaInput struct {
-	BuildpackMetadataPath string
-}
-
 type BPMetadata struct {
 	PoetryVersion string
 	PythonVersion string
 }
 
-func (input MetaInput) ReadMetadata() (BPMetadata, error) {
-	fmt.Println("Reading Metadata File . . .")
-	var file, err = os.Open(input.BuildpackMetadataPath)
-	if err != nil {
-		return BPMetadata{}, err
-	}
-	defer file.Close()
-
+func ReadMetadata(r io.Reader) (BPMetadata, error) {
 	fmt.Println("Decoding . . .")
 	var m Deps
-	_, err = toml.DecodeReader(file, &m)
+	_, err := toml.DecodeReader(r, &m)
 	if err != nil {
 		return BPMetadata{}, err
 	}
