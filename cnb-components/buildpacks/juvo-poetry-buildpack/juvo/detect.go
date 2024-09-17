@@ -28,12 +28,8 @@ func Detect(fs Fs) packit.DetectFunc {
 			return packit.DetectResult{}, err
 		}
 
-		// Read the content of buildpack.toml. Well find poetry dep there
-		var input = MetaInput{
-			BuildpackMetadataPath: filepath.Join(ctx.CNBPath, "buildpack.toml"),
-		}
-		fmt.Println("Fetching Poetry Version . . .")
-		versions, err := input.ReadMetadata()
+		fmt.Println("Fetching Version Info . . .")
+		versions, err := fs.ParseMetadataFromFile(ctx.CNBPath)
 		if err != nil {
 			return packit.DetectResult{}, err
 		}
