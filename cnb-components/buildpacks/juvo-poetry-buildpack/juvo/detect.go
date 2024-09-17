@@ -28,11 +28,22 @@ func Detect(fs Fs) packit.DetectFunc {
 			return packit.DetectResult{}, err
 		}
 
+		// Read the content of buildpack.toml. Well find poetry dep there
+		var input = MetaInput{
+			BuildpackMetadataPath: filepath.Join(ctx.CNBPath, "buildpack.toml"),
+		}
+		fmt.Println("Fetching Poetry Version . . .")
+		versions, err := input.ReadMetadata()
+		if err != nil {
+			return packit.DetectResult{}, err
+		}
+		fmt.Printf("Poetry Version: %s\n", versions.PoetryVersion)
+		fmt.Printf("Python Version: %s\n", versions.PythonVersion)
+
 		requires := []packit.BuildPlanRequirement{
 			{
 				Name: "cpython",
 				Metadata: Metadata{
-					// Version: "3.12.0", // use pyproject version
 					Build:  true,
 					Launch: true,
 				},
@@ -40,7 +51,7 @@ func Detect(fs Fs) packit.DetectFunc {
 			{
 				Name: "poetry",
 				Metadata: Metadata{
-					Version: "1.8.2",
+					Version: versions.PoetryVersion, // use the verson configured in buildpack.toml
 					Build:   true,
 					Launch:  true,
 				},

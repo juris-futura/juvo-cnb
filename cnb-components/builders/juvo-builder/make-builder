@@ -30,20 +30,20 @@ get-docker-password |
 docker login -u jurisfuturasb --password-stdin
 
 for TARGET in build run; do
-  ARTIFACT="jurisfutura/juvo-cnb-$TARGET:$TAG"
+  ARTIFACT="jurisfutura/juvo-poetry-$TARGET:$TAG"
   docker buildx build . -t $ARTIFACT --target $TARGET
   docker push $ARTIFACT
 done
 
 cat << EOF > ./builder.toml
 [build]
-image = "jurisfutura/juvo-cnb-build:$TAG"
+image = "jurisfutura/juvo-poetry-build:$TAG"
 
 [run]
 [[run.images]]
-image = "jurisfutura/juvo-cnb-run:$TAG"
+image = "jurisfutura/juvo-poetry-run:$TAG"
 EOF
 
-BUILDER_IMAGE="jurisfutura/juvo-builder:$TAG"
+BUILDER_IMAGE="jurisfutura/juvo-poetry-builder:$TAG"
 pack builder create $BUILDER_IMAGE --config ./builder.toml
 docker push $BUILDER_IMAGE

@@ -13,7 +13,7 @@ func Build() packit.BuildFunc {
 			return packit.BuildResult{}, err
 		}
 
-		fmt.Println("Installing Virtual Env . . .")
+		fmt.Println("Configuring venv in project . . .")
 
 		poetryConfig := CommandDescriptor{
 			Cmd:  "poetry",
@@ -29,6 +29,8 @@ func Build() packit.BuildFunc {
 			KeyFilePath:    "/platform/bindings/git/id_rsa",
 			FallbackEnvVar: "PRIV_SSH_KEY",
 		}
+
+		fmt.Println("Installing Virtual Env . . .")
 
 		if err = ExecuteStep(poetryInstall); err != nil {
 			return packit.BuildResult{}, err

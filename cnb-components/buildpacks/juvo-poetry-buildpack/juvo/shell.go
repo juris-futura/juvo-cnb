@@ -33,6 +33,7 @@ func ExecuteStep(e Executable) error {
 		fmt.Println(envvar)
 		cmd.Env = append(cmd.Env, envvar)
 	}
+	fmt.Println(cmd)
 	return ExecuteCommand(cmd)
 }
 

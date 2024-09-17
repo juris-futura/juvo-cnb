@@ -36,7 +36,7 @@ var _ = Describe("Detect", func() {
 				providers = append(providers, prov.Name)
 			}
 
-			Expect(requirements).To(HaveExactElements("poetry", "juvo"))
+			Expect(requirements).To(HaveExactElements("cpython", "poetry", "juvo"))
 			Expect(providers).To(HaveExactElements("juvo"))
 		})
 	})

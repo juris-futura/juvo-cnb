@@ -17,12 +17,14 @@ RUN groupadd cnb --gid ${CNB_GROUP_ID} && \
     useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates build-essential python3-dev \
-                       libncursesw5-dev libgdbm-dev libc6-dev \
-                       zlib1g-dev libssl-dev openssl libffi-dev && \
+    apt-get install -y ca-certificates build-essential python3-dev && \
+    apt-get install -y libncursesw5-dev libgdbm-dev libc6-dev && \
+    apt-get install -y libzmq3-dev && \
+    apt-get install -y zlib1g-dev libssl-dev openssl libffi-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # BUILD IMAGE
+
 FROM base AS build
 
 RUN apt-get update && \
@@ -37,10 +39,6 @@ USER ${CNB_USER_ID}:${CNB_GROUP_ID}
 
 # RUN IMAGE
 FROM base AS run
-
-RUN apt-get update && \
-    apt-get install -y libzmq3-dev && \
-    rm -rf /var/lib/apt/lists/*
 
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
 
