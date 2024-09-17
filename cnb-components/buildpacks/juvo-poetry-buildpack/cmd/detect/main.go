@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/juris-futura/juvo-poetry-buildpack/poetry"
+	juvo "github.com/juris-futura/juvo-poetry-buildpack/juvo"
 	"github.com/paketo-buildpacks/packit"
 )
 
 func main() {
-	packit.Detect(poetry.Detect())
+	packit.Detect(juvo.Detect(juvo.PhysicalFs{}))
 }

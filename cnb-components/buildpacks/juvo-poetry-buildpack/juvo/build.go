@@ -1,38 +1,19 @@
-package poetry
+package juvo
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"github.com/paketo-buildpacks/packit"
 )
 
 func Build() packit.BuildFunc {
 	return func(ctx packit.BuildContext) (packit.BuildResult, error) {
-		// Read the content of buildpack.toml. Well find poetry dep there
-		var input = MetaInput{
-			BuildpackMetadataPath: filepath.Join(ctx.CNBPath, "buildpack.toml"),
-		}
-		fmt.Println("Fetching Poetry Version . . .")
-		poetryVersion, err := input.ReadMetadata()
-		if err != nil {
-			return packit.BuildResult{}, err
-		}
-		fmt.Printf("Poetry Version: %s\n", poetryVersion)
-
-		poetryLayer, err := ctx.Layers.Get("poetry")
+		juvoLayer, err := LaunchLayer(ctx, "juvo")
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
 
-		poetryLayer, err = poetryLayer.Reset()
-		if err != nil {
-			return packit.BuildResult{}, err
-		}
-
-		poetryLayer.Launch = true
-
-		fmt.Println("Installing Virtual Env . . .")
+		fmt.Println("Configuring venv in project . . .")
 
 		poetryConfig := CommandDescriptor{
 			Cmd:  "poetry",
@@ -49,12 +30,27 @@ func Build() packit.BuildFunc {
 			FallbackEnvVar: "PRIV_SSH_KEY",
 		}
 
+		fmt.Println("Installing Virtual Env . . .")
+
 		if err = ExecuteStep(poetryInstall); err != nil {
 			return packit.BuildResult{}, err
 		}
 
 		return packit.BuildResult{
-			Layers: []packit.Layer{poetryLayer},
+			Layers: []packit.Layer{*juvoLayer},
 		}, nil
 	}
+}
+
+func LaunchLayer(ctx packit.BuildContext, layerName string) (*packit.Layer, error) {
+	layer, err := ctx.Layers.Get(layerName)
+	if err != nil {
+		return nil, err
+	}
+	layer, err = layer.Reset()
+	if err != nil {
+		return nil, err
+	}
+	layer.Launch = true
+	return &layer, nil
 }

@@ -1,4 +1,4 @@
-package poetry
+package juvo
 
 import (
 	"fmt"
@@ -20,15 +20,16 @@ type MetaInput struct {
 	BuildpackMetadataPath string
 }
 
-type Metadata struct {
+type BPMetadata struct {
 	PoetryVersion string
+	PythonVersion string
 }
 
-func (input MetaInput) ReadMetadata() (Metadata, error) {
+func (input MetaInput) ReadMetadata() (BPMetadata, error) {
 	fmt.Println("Reading Metadata File . . .")
 	var file, err = os.Open(input.BuildpackMetadataPath)
 	if err != nil {
-		return Metadata{}, err
+		return BPMetadata{}, err
 	}
 	defer file.Close()
 
@@ -36,23 +37,31 @@ func (input MetaInput) ReadMetadata() (Metadata, error) {
 	var m Deps
 	_, err = toml.DecodeReader(file, &m)
 	if err != nil {
-		return Metadata{}, err
+		return BPMetadata{}, err
 	}
 
-	poetryVersion, err := readPoetryVersion(m)
+	poetryVersion, err := readVersion("poetry", m)
 	if err != nil {
-		return Metadata{}, err
+		return BPMetadata{}, err
 	}
 
-	return Metadata{PoetryVersion: poetryVersion}, nil
+	pythonVersion, err := readVersion("python", m)
+	if err != nil {
+		return BPMetadata{}, err
+	}
+
+	return BPMetadata{
+		PoetryVersion: poetryVersion,
+		PythonVersion: pythonVersion,
+	}, nil
 }
 
-func readPoetryVersion(m Deps) (string, error) {
+func readVersion(nm string, m Deps) (string, error) {
 	var deps = m.Metadata.Dependencies
 	for _, dep := range deps {
-		if dep.Name == "poetry" {
+		if dep.Name == nm {
 			return dep.Version, nil
 		}
 	}
-	return "", fmt.Errorf("`poetry` dependency not found")
+	return "", fmt.Errorf("`%s` dependency not found", nm)
 }
