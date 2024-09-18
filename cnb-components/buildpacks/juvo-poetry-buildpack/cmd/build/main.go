@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	packit.Build(juvo.Build())
+	packit.Build(juvo.Build(juvo.Executor{}))
 }

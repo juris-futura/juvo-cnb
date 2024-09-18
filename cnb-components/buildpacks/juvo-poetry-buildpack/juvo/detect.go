@@ -16,10 +16,16 @@ type Metadata struct {
 func Detect(fs Fs) packit.DetectFunc {
 	shouldDetect := func(workdir string) error {
 		path := filepath.Join(workdir, "pyproject.toml")
-		if fs.FileExists(path) {
+		exists, err := fs.FileExists(path)
+		if err != nil {
+			return err
+		}
+
+		if exists {
 			return nil
 		}
-		err := fmt.Errorf("shouldDetect: File not found %s", path)
+
+		err = fmt.Errorf("shouldDetect: File not found %s", path)
 		return err
 	}
 

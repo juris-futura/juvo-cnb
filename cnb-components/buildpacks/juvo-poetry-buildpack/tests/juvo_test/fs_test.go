@@ -1,6 +1,7 @@
 package juvo_test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -10,36 +11,88 @@ import (
 )
 
 var _ = Describe("Fs", func() {
-	var fname string
-	var tmpdir string
+	Describe("ParseMetadataFromFile", func() {
+		var fname string
+		var tmpdir string
 
-	BeforeEach(func() {
-		var err error
-		tmpdir, err = os.MkdirTemp("", "fs_test")
-		Expect(err).ToNot(HaveOccurred())
+		poetryVer := "1"
+		pythonVer := "2"
+		BeforeEach(func() {
+			var err error
+			tmpdir, err = os.MkdirTemp("", "fs_test")
+			Expect(err).ToNot(HaveOccurred())
 
-		fname = filepath.Join(tmpdir, "foo")
-		f, err := os.Create(fname)
-		Expect(err).ToNot(HaveOccurred())
-		f.Close()
-	})
+			fname = filepath.Join(tmpdir, "buildpack.toml")
+			f, err := os.Create(fname)
+			defer f.Close()
+			Expect(err).ToNot(HaveOccurred())
 
-	AfterEach(func() {
-		Expect(os.RemoveAll(tmpdir)).To(Succeed())
-	})
-
-	Context("When file exists", func() {
-		It("Returns true", func() {
-			fs := juvo.PhysicalFs{}
-			Expect(fs.FileExists(fname)).To(BeTrue())
+			f.WriteString(fmt.Sprintf(`
+				[metadata]
+				  [[metadata.dependencies]]
+				    name = "python"
+					version = "%s"
+				  [[metadata.dependencies]]
+				    name = "poetry"
+				    version = "%s"
+			`, pythonVer, poetryVer))
 		})
-	})
 
-	Context("When file does not exist", func() {
-		It("Returns false", func() {
-			fs := juvo.PhysicalFs{}
-			invalidname := filepath.Join(tmpdir, "invalid")
-			Expect(fs.FileExists(invalidname)).To(BeFalse())
+		AfterEach(func() {
+			Expect(os.RemoveAll(tmpdir)).To(Succeed())
+		})
+
+		Context("On a well-formed toml", func() {
+			It("Parses the file", func() {
+				fixture := juvo.BPMetadata{
+					PoetryVersion: poetryVer,
+					PythonVersion: pythonVer,
+				}
+				fs := juvo.PhysicalFs{}
+				result, err := fs.ParseMetadataFromFile(tmpdir)
+
+				Expect(err).ToNot(HaveOccurred())
+				Expect(result).To(Equal(fixture))
+			})
+		})
+
+	})
+	Describe("FileExists", func() {
+		var fname string
+		var tmpdir string
+
+		BeforeEach(func() {
+			var err error
+			tmpdir, err = os.MkdirTemp("", "fs_test")
+			Expect(err).ToNot(HaveOccurred())
+
+			fname = filepath.Join(tmpdir, "foo")
+			f, err := os.Create(fname)
+			Expect(err).ToNot(HaveOccurred())
+			f.Close()
+		})
+
+		AfterEach(func() {
+			Expect(os.RemoveAll(tmpdir)).To(Succeed())
+		})
+
+		Context("When file exists", func() {
+			It("Returns true", func() {
+				fs := juvo.PhysicalFs{}
+				exists, err := fs.FileExists(fname)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(exists).To(BeTrue())
+			})
+		})
+
+		Context("When file does not exist", func() {
+			It("Returns false", func() {
+				fs := juvo.PhysicalFs{}
+				invalidname := filepath.Join(tmpdir, "invalid")
+				exists, err := fs.FileExists(invalidname)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(exists).To(BeFalse())
+			})
 		})
 	})
 })

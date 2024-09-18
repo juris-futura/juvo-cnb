@@ -6,15 +6,21 @@ import (
 )
 
 type Fs interface {
-	FileExists(string) bool
+	FileExists(string) (bool, error)
 	ParseMetadataFromFile(string) (BPMetadata, error)
 }
 
 type PhysicalFs struct{}
 
-func (_ PhysicalFs) FileExists(filepath string) bool {
+func (_ PhysicalFs) FileExists(filepath string) (bool, error) {
 	_, err := os.Stat(filepath)
-	return err == nil
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
 }
 
 func (_ PhysicalFs) ParseMetadataFromFile(path string) (BPMetadata, error) {
