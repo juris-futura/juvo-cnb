@@ -6,7 +6,7 @@ import (
 	"github.com/paketo-buildpacks/packit"
 )
 
-func Build() packit.BuildFunc {
+func Build(ex Steppable) packit.BuildFunc {
 	return func(ctx packit.BuildContext) (packit.BuildResult, error) {
 		juvoLayer, err := LaunchLayer(ctx, "juvo")
 		if err != nil {
@@ -20,7 +20,7 @@ func Build() packit.BuildFunc {
 			Args: []string{"config", "virtualenvs.in-project", "true"},
 		}
 
-		if err = ExecuteStep(poetryConfig); err != nil {
+		if err = ex.ExecuteStep(poetryConfig); err != nil {
 			return packit.BuildResult{}, err
 		}
 
@@ -32,7 +32,7 @@ func Build() packit.BuildFunc {
 
 		fmt.Println("Installing Virtual Env . . .")
 
-		if err = ExecuteStep(poetryInstall); err != nil {
+		if err = ex.ExecuteStep(poetryInstall); err != nil {
 			return packit.BuildResult{}, err
 		}
 

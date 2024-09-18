@@ -17,15 +17,21 @@ type MockFs struct {
 	Files map[string]string
 }
 
-func (fs MockFs) FileExists(filepath string) bool {
+func (fs MockFs) FileExists(filepath string) (bool, error) {
 	for k := range fs.Files {
 		if k == filepath {
-			return true
+			return true, nil
 		}
 	}
-	return false
+	return false, nil
 }
 
 func (fs MockFs) ParseMetadataFromFile(_ string) (juvo.BPMetadata, error) {
 	return juvo.BPMetadata{}, nil
+}
+
+type MockExecutor struct{}
+
+func (_ MockExecutor) ExecuteStep(_ juvo.Executable) error {
+	return nil
 }

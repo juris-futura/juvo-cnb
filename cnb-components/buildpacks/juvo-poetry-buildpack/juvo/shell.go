@@ -20,7 +20,13 @@ func (ctx CommandDescriptor) MkCmd() (CommandDescriptor, error) {
 	return ctx, nil
 }
 
-func ExecuteStep(e Executable) error {
+type Steppable interface {
+	ExecuteStep(Executable) error
+}
+
+type Executor struct{}
+
+func (_ Executor) ExecuteStep(e Executable) error {
 	var cd, err = e.MkCmd()
 	if err != nil {
 		return err
