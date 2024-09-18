@@ -1,0 +1,34 @@
+---
+name: CI
+
+on: push
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: cnb-components/buildpacks/juvo-poetry-buildpack/go.mod
+      - name: Build binaries
+        run: |
+          for BIN in detect build; do
+           go build $@ -ldflags="-s -w" -o ./bin/$BIN ./cmd/$BIN/main.go
+          done
+        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
+        env:
+          GOOS: linux
+      - name: Run tests
+        run: go test
+        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/tests/juvo_test
+      - name: Create package
+        run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
+        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
+
