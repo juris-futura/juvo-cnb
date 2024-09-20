@@ -20,8 +20,7 @@ jobs:
       - name: Build binaries
         run: |
           for BIN in detect build; do
-           go build $@ -ldflags="-s -w" -o ./bin/$BIN ./cmd/$BIN/main.go
-           done
-        working-directory: cnb-components/buildpacks/juvo/poetry-buildpack
+           go build $@ -ldflags="-s -w" -o ./cnb-components/buildpacks/juvo/poetry-buildpack/bin/$BIN ./cnb-components/buildpacks/juvo/poetry-buildpack/cmd/$BIN/main.go
+          done
         env:
           GOOS: linux
