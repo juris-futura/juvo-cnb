@@ -17,9 +17,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: cnb-components/buildpacks/juvo-poetry-buildpack/go.mod
-      - name: Init go mod
-        run: go mod init
-        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/
       - name: Build binaries
         run: |
           for BIN in detect build; do
