@@ -19,7 +19,7 @@ jobs:
           go-version-file: cnb-components/buildpacks/juvo-poetry-buildpack/go.mod
       - name: Init go mod
         run: go mod init
-        working-directory: ./cnb-components/buildpacks/juvo/poetry-buildpack/
+        working-directory: cnb-components/buildpacks/juvo/poetry-buildpack/
       - name: Build binaries
         run: |
           for BIN in detect build; do
