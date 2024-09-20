@@ -19,11 +19,11 @@ jobs:
           go-version-file: cnb-components/buildpacks/juvo-poetry-buildpack/go.mod
       - name: Init go mod
         run: go mod init
-        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo/poetry-buildpack/
+        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/
       - name: Build binaries
         run: |
           for BIN in detect build; do
-           go build $@ -ldflags="-s -w" -o ${{ github.workspace }}/cnb-components/buildpacks/juvo/poetry-buildpack/bin/$BIN ${{ github.workspace }}/cnb-components/buildpacks/juvo/poetry-buildpack/cmd/$BIN/main.go
+           go build $@ -ldflags="-s -w" -o ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/bin/$BIN ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/cmd/$BIN/main.go
           done
         env:
           GOOS: linux
