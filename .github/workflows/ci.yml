@@ -27,3 +27,12 @@ jobs:
           GOOS: linux
       - name: Create package
         run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
+
+      # Build image 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          tags: test
+
