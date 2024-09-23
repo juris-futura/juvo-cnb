@@ -35,4 +35,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           tags: test
-
+          file: ${{ github.workspace }}/cnb-components/builders/juvo-builder/Dockerfile
