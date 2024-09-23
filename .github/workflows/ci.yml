@@ -25,6 +25,9 @@ jobs:
         working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
         env:
           GOOS: linux
+      - name: Run tests
+        run: go test
+        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/tests/juvo_test
       - name: Create package
         run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
         working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
