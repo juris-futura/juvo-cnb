@@ -25,10 +25,9 @@ jobs:
         working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
         env:
           GOOS: linux
-      - run: ls -la
-     #- name: Create package
-     #   run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
-
+      - name: Create package
+        run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
+        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
       # Build image 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
