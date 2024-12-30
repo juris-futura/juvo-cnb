@@ -13,8 +13,8 @@ LABEL io.buildpacks.stack.id="com.jurisfutura.cnb.stacks.alpine"
 ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
 ENV CNB_PLATFORM_API=0.11
-RUN groupadd cnb --gid ${CNB_GROUP_ID} && \
-    useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
+RUN addgroup -g ${CNB_GROUP_ID} cnb
+RUN adduser -u ${CNB_USER_ID} -G cnb cnb -D
 
 RUN apt-get update && \
     apt-get install -y ca-certificates build-essential python3-dev && \
