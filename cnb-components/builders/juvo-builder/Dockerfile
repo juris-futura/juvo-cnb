@@ -1,10 +1,10 @@
-FROM debian:bookworm AS base
+FROM alpine:3.21.0 AS base
 
 # Each stack needs an identifier. This is used by the CNB framework to
 # determine compatibility among components, for example, matching the build
 # and run images of a stack, or stack eligibility to use with a particular buildpack.
-ENV CNB_STACK_ID="com.jurisfutura.cnb.stacks.ubuntu"
-LABEL io.buildpacks.stack.id="com.jurisfutura.cnb.stacks.ubuntu"
+ENV CNB_STACK_ID="com.jurisfutura.cnb.stacks.alpine"
+LABEL io.buildpacks.stack.id="com.jurisfutura.cnb.stacks.alpine"
 
 # The CNB framework executes commands during image building as a specified
 # user rather than the Docker default of root. In fact, it is expressly
