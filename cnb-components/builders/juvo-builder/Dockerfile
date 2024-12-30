@@ -1,4 +1,4 @@
-FROM alpine:3.21.0 AS base
+FROM python:3.12-alpine3.21 AS base
 
 # Each stack needs an identifier. This is used by the CNB framework to
 # determine compatibility among components, for example, matching the build
