@@ -16,21 +16,17 @@ ENV CNB_PLATFORM_API=0.11
 RUN addgroup -g ${CNB_GROUP_ID} cnb
 RUN adduser -u ${CNB_USER_ID} -G cnb cnb -D
 
-RUN apt-get update && \
-    apt-get install -y ca-certificates build-essential python3-dev && \
-    apt-get install -y libncursesw5-dev libgdbm-dev libc6-dev && \
-    apt-get install -y libzmq3-dev && \
-    apt-get install -y zlib1g-dev libssl-dev openssl libffi-dev && \
-    rm -rf /var/lib/apt/lists/*
+# alpine-sdk replaces build-essential
+
+RUN apk add --update ca-certificates alpine-sdk python3-dev \
+                     ncurses gdbm-dev libc6-compat libzmq \
+                     zlib-dev libssl3 openssl libffi-dev
 
 # BUILD IMAGE
 
 FROM base AS build
 
-RUN apt-get update && \
-    apt-get install -y git && \
-    rm -rf /var/lib/apt/lists/*
-
+RUN apk add --update git
 LABEL io.buildpacks.stack.mixins="[\"build:git\"]"
 
 # we set the active user for the image employing the environment variables
