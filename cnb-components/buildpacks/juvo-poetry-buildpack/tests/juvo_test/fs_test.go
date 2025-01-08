@@ -1,7 +1,6 @@
 package juvo_test
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -26,16 +25,6 @@ var _ = Describe("Fs", func() {
 			f, err := os.Create(fname)
 			defer f.Close()
 			Expect(err).ToNot(HaveOccurred())
-
-			f.WriteString(fmt.Sprintf(`
-				[metadata]
-				  [[metadata.dependencies]]
-				    name = "python"
-					version = "%s"
-				  [[metadata.dependencies]]
-				    name = "poetry"
-				    version = "%s"
-			`, pythonVer, poetryVer))
 		})
 
 		AfterEach(func() {
@@ -44,10 +33,6 @@ var _ = Describe("Fs", func() {
 
 		Context("On a well-formed toml", func() {
 			It("Parses the file", func() {
-				fixture := juvo.BPMetadata{
-					PoetryVersion: poetryVer,
-					PythonVersion: pythonVer,
-				}
 				fs := juvo.PhysicalFs{}
 				result, err := fs.ParseMetadataFromFile(tmpdir)
 
