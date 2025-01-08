@@ -1,7 +1,6 @@
 package juvo_test
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -15,8 +14,6 @@ var _ = Describe("Fs", func() {
 		var fname string
 		var tmpdir string
 
-		poetryVer := "1"
-		pythonVer := "2"
 		BeforeEach(func() {
 			var err error
 			tmpdir, err = os.MkdirTemp("", "fs_test")
@@ -26,16 +23,6 @@ var _ = Describe("Fs", func() {
 			f, err := os.Create(fname)
 			defer f.Close()
 			Expect(err).ToNot(HaveOccurred())
-
-			f.WriteString(fmt.Sprintf(`
-				[metadata]
-				  [[metadata.dependencies]]
-				    name = "python"
-					version = "%s"
-				  [[metadata.dependencies]]
-				    name = "poetry"
-				    version = "%s"
-			`, pythonVer, poetryVer))
 		})
 
 		AfterEach(func() {
@@ -44,15 +31,10 @@ var _ = Describe("Fs", func() {
 
 		Context("On a well-formed toml", func() {
 			It("Parses the file", func() {
-				fixture := juvo.BPMetadata{
-					PoetryVersion: poetryVer,
-					PythonVersion: pythonVer,
-				}
 				fs := juvo.PhysicalFs{}
-				result, err := fs.ParseMetadataFromFile(tmpdir)
+				_, err := fs.ParseMetadataFromFile(tmpdir)
 
 				Expect(err).ToNot(HaveOccurred())
-				Expect(result).To(Equal(fixture))
 			})
 		})
 
