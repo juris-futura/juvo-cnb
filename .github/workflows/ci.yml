@@ -17,6 +17,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: cnb-components/buildpacks/juvo-poetry-buildpack/go.mod
+      - name: Run tests
+        run: go test
+        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/tests/juvo_test
       - name: Build binaries
         run: |
           for BIN in detect build; do
@@ -25,9 +28,6 @@ jobs:
         working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
         env:
           GOOS: linux
-      - name: Run tests
-        run: go test
-        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/tests/juvo_test
       - name: Create package
         run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
         working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
