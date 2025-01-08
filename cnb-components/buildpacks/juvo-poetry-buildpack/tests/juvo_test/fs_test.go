@@ -33,10 +33,6 @@ var _ = Describe("Fs", func() {
 
 		Context("On a well-formed toml", func() {
 			It("Parses the file", func() {
-				fixture := juvo.BPMetadata{
-					PoetryVersion: poetryVer,
-					PythonVersion: pythonVer,
-				}
 				fs := juvo.PhysicalFs{}
 				result, err := fs.ParseMetadataFromFile(tmpdir)
 
