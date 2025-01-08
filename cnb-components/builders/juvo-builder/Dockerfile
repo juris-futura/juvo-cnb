@@ -18,11 +18,11 @@ RUN adduser -u ${CNB_USER_ID} -G cnb cnb -D
 
 # alpine-sdk replaces build-essential
 
-RUN apk add --update ca-certificates alpine-sdk python3-dev \
+RUN apk add --update --no-cache ca-certificates alpine-sdk python3-dev \
                      ncurses gdbm-dev libc6-compat libzmq \
                      zlib-dev libssl3 openssl libffi-dev openssh bash
 
-RUN pip install 'poetry==1.8.4'
+RUN pip --no-cache-dir install 'poetry==1.8.4'
 
 # BUILD IMAGE
 
