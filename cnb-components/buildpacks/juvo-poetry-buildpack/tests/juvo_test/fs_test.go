@@ -26,16 +26,6 @@ var _ = Describe("Fs", func() {
 			f, err := os.Create(fname)
 			defer f.Close()
 			Expect(err).ToNot(HaveOccurred())
-
-			f.WriteString(fmt.Sprintf(`
-				[metadata]
-				  [[metadata.dependencies]]
-				    name = "python"
-					version = "%s"
-				  [[metadata.dependencies]]
-				    name = "poetry"
-				    version = "%s"
-			`, pythonVer, poetryVer))
 		})
 
 		AfterEach(func() {
