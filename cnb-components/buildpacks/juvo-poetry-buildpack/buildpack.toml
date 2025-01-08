@@ -9,12 +9,3 @@ api = "0.9"
 [[targets]]
   os = "linux"
   arch = "amd64"
-
-[metadata]
-  [[metadata.dependencies]]
-    name = "python"
-    version = "3.12.5"
-  [[metadata.dependencies]]
-    name = "poetry"
-    version = "1.8.2"
-

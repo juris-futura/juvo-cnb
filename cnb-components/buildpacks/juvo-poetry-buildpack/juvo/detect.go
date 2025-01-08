@@ -34,30 +34,7 @@ func Detect(fs Fs) packit.DetectFunc {
 			return packit.DetectResult{}, err
 		}
 
-		fmt.Println("Fetching Version Info . . .")
-		versions, err := fs.ParseMetadataFromFile(ctx.CNBPath)
-		if err != nil {
-			return packit.DetectResult{}, err
-		}
-		fmt.Printf("Poetry Version: %s\n", versions.PoetryVersion)
-		fmt.Printf("Python Version: %s\n", versions.PythonVersion)
-
 		requires := []packit.BuildPlanRequirement{
-			{
-				Name: "cpython",
-				Metadata: Metadata{
-					Build:  true,
-					Launch: true,
-				},
-			},
-			{
-				Name: "poetry",
-				Metadata: Metadata{
-					Version: versions.PoetryVersion, // use the verson configured in buildpack.toml
-					Build:   true,
-					Launch:  true,
-				},
-			},
 			{
 				Name: "juvo",
 			},
