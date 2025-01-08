@@ -1,7 +1,6 @@
 package juvo_test
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
