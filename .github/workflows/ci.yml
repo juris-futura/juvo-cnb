@@ -1,7 +1,10 @@
 ---
 name: CI
 
-on: push
+on:
+  workflow_call:
+  workflow_dispatch:
+  pull_request:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -20,15 +23,4 @@ jobs:
       - name: Run tests
         run: go test
         working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/tests/juvo_test
-      - name: Build binaries
-        run: |
-          for BIN in detect build; do
-           go build $@ -ldflags="-s -w" -o ./bin/$BIN ./cmd/$BIN/main.go
-          done
-        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
-        env:
-          GOOS: linux
-      - name: Create package
-        run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
-        working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/ 
 
