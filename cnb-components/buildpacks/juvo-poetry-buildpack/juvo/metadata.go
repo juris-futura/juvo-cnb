@@ -29,19 +29,19 @@ func ReadMetadata(r io.Reader) (BPMetadata, error) {
 		return BPMetadata{}, err
 	}
 
-	poetryVersion, err := readVersion("poetry", m)
-	if err != nil {
-		return BPMetadata{}, err
-	}
+	// poetryVersion, err := readVersion("poetry", m)
+	// if err != nil {
+	// 	return BPMetadata{}, err
+	// }
 
-	pythonVersion, err := readVersion("python", m)
-	if err != nil {
-		return BPMetadata{}, err
-	}
+	// pythonVersion, err := readVersion("python", m)
+	// if err != nil {
+	// 	return BPMetadata{}, err
+	// }
 
 	return BPMetadata{
-		PoetryVersion: poetryVersion,
-		PythonVersion: pythonVersion,
+		PoetryVersion: "",
+		PythonVersion: "",
 	}, nil
 }
 

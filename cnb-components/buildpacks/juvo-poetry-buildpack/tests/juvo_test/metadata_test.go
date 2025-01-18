@@ -12,8 +12,8 @@ import (
 var _ = Describe("Metadata", func() {
 	Context("With a well-formed toml", func() {
 		It("Parses the file", func() {
-			poetryVer := "1"
-			pythonVer := "2"
+			poetryVer := ""
+			pythonVer := ""
 			fixture := juvo.BPMetadata{
 				PythonVersion: pythonVer,
 				PoetryVersion: poetryVer,

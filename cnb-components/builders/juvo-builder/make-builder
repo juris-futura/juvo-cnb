@@ -19,6 +19,12 @@ function get-docker-password() {
   base64 -d
 }
 
+## WARNING: USE GHA
+echo "WARNING: There is a GitHub Action workflow Available."
+echo "GHA Workflow is prefered. Try NOT to use this script"
+echo "Press [Enter] to continue, or Ctrl-C to exit"
+read
+
 TAG=latest
 set +u
 if [ "$1" != "" ]; then
