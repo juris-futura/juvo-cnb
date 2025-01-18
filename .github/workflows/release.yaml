@@ -46,10 +46,9 @@ jobs:
       - name: Build And Push Builder Components
         run: |
           for TARGET in build run; do
+            ARTIFACT="ghcr.io/${{ github.repository_owner }}/juvo-poetry-$TARGET:${{ github.ref_name }}"
             docker buildx build . -t $ARTIFACT --target $TARGET --push
           done
-        env:
-          ARTIFACT: "ghcr.io/${{ github.repository_owner }}/juvo-poetry-$TARGET:${{ github.ref_name }}"
         working-directory: ${{ github.workspace }}/cnb-components/builders/juvo-builder/
 
       - name: Create Builder Config File
