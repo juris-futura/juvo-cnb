@@ -21,8 +21,8 @@ RUN adduser -u ${CNB_USER_ID} -G cnb cnb -D
 RUN apk add --update --no-cache ca-certificates alpine-sdk python3-dev \
                      ncurses gdbm-dev libc6-compat libzmq \
                      zlib-dev libssl3 openssl libffi-dev openssh bash
-
-RUN pip --no-cache-dir install 'poetry==1.8.4'
+RUN apk add --no-cache build-base python3-dev py3-pip
+RUN pip --no-cache-dir install "poetry==1.8.4"
 
 # BUILD IMAGE
 
