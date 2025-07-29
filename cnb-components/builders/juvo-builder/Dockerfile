@@ -1,4 +1,4 @@
-FROM python:3.12.8-slim-bookworm AS base
+FROM python:3.13-slim-bookworm AS base
 
 # Each stack needs an identifier. This is used by the CNB framework to
 # determine compatibility among components, for example, matching the build
