@@ -36,6 +36,7 @@ FROM base AS build
 
 RUN apt-get update && \
     apt-get install -y git && \
+    apt-get install -y pandoc && \
     rm -rf /var/lib/apt/lists/*
 
 LABEL io.buildpacks.stack.mixins="[\"build:git\"]"
