@@ -55,7 +55,7 @@ jobs:
               --push
           done
         working-directory: ${{ github.workspace }}/cnb-components/builders/juvo-builder/
-        
+
       - name: Create Builder Config File
         run: |
           cat <<EOF > builder-pandoc.toml
