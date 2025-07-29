@@ -22,7 +22,6 @@ RUN apt-get update && \
     apt-get install -y libncursesw5-dev libgdbm-dev libc6-dev && \
     apt-get install -y libzmq3-dev && \
     apt-get install -y zlib1g-dev libssl-dev openssl libffi-dev && \
-    apt-get install -y pandoc && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip --no-cache-dir install "poetry==1.8.4"
@@ -33,6 +32,7 @@ FROM base AS build
 
 RUN apt-get update && \
     apt-get install -y git && \
+    apt-get install -y pandoc && \
     rm -rf /var/lib/apt/lists/*
 
 LABEL io.buildpacks.stack.mixins="[\"build:git\"]"
