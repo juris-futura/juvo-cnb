@@ -34,14 +34,6 @@ RUN pip --no-cache-dir install "poetry==1.8.4"
 
 FROM base AS build
 
-# Conditionally install pandoc
-RUN if [ "$INSTALL_PANDOC" = "true" ]; then \
-    apt-get update && \
-    apt-get install -y pandoc && \
-    rm -rf /var/lib/apt/lists/*; \
-fi
-
-
 RUN apt-get update && \
     apt-get install -y git && \
     rm -rf /var/lib/apt/lists/*
