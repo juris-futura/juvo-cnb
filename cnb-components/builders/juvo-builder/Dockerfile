@@ -14,6 +14,9 @@ ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
 ENV CNB_PLATFORM_API=0.11
 
+# Build argument to control pandoc installation
+ARG INSTALL_PANDOC=false
+
 RUN groupadd cnb --gid ${CNB_GROUP_ID}
 RUN useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
 
@@ -23,6 +26,13 @@ RUN apt-get update && \
     apt-get install -y libzmq3-dev && \
     apt-get install -y zlib1g-dev libssl-dev openssl libffi-dev && \
     rm -rf /var/lib/apt/lists/*
+
+# Conditionally install pandoc
+RUN if [ "$INSTALL_PANDOC" = "true" ]; then \
+apt-get update && \
+apt-get install -y pandoc && \
+rm -rf /var/lib/apt/lists/*; \
+fi
 
 RUN pip --no-cache-dir install "poetry==1.8.4"
 
