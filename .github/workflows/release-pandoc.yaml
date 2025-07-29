@@ -3,7 +3,8 @@ name: Release with Pandoc
 
 on:
   push:
-    tags: "*"
+    tags: 
+      - "pandoc-*"
 
 concurrency:
   group: release-pandoc-${{ github.ref }}
