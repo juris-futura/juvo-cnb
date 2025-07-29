@@ -1,4 +1,4 @@
-FROM python:3.12.8-slim-bookworm AS base
+FROM python:3.13-slim-bookworm AS base
 
 # Each stack needs an identifier. This is used by the CNB framework to
 # determine compatibility among components, for example, matching the build
@@ -14,6 +14,9 @@ ENV CNB_USER_ID=1000
 ENV CNB_GROUP_ID=1000
 ENV CNB_PLATFORM_API=0.11
 
+# Build argument to control pandoc installation
+ARG INSTALL_PANDOC=false
+
 RUN groupadd cnb --gid ${CNB_GROUP_ID}
 RUN useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash cnb
 
@@ -24,11 +27,20 @@ RUN apt-get update && \
     apt-get install -y zlib1g-dev libssl-dev openssl libffi-dev && \
     rm -rf /var/lib/apt/lists/*
 
+
 RUN pip --no-cache-dir install "poetry==1.8.4"
 
 # BUILD IMAGE
 
 FROM base AS build
+
+# Conditionally install pandoc
+RUN if [ "$INSTALL_PANDOC" = "true" ]; then \
+    apt-get update && \
+    apt-get install -y pandoc && \
+    rm -rf /var/lib/apt/lists/*; \
+fi
+
 
 RUN apt-get update && \
     apt-get install -y git && \

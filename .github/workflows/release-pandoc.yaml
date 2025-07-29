@@ -1,12 +1,12 @@
 ---
-name: Release
+name: Release with Pandoc
 
 on:
   push:
     tags: "*"
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-pandoc-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -45,10 +45,11 @@ jobs:
 
       - name: Build And Push Builder Components
         run: |
+          # Build pandoc version
           for TARGET in build run; do
-            ARTIFACT="ghcr.io/${{ github.repository_owner }}/juvo-poetry-$TARGET:${{ github.ref_name }}"
+            ARTIFACT="ghcr.io/${{ github.repository_owner }}/juvo-poetry-$TARGET-pandoc:${{ github.ref_name }}"
             docker buildx build . \
-              --build-arg INSTALL_PANDOC=false \
+              --build-arg INSTALL_PANDOC=true \
               -t $ARTIFACT \
               --target $TARGET \
               --push
@@ -57,13 +58,13 @@ jobs:
 
       - name: Create Builder Config File
         run: |
-          cat <<EOF > builder.toml
+          cat <<EOF > builder-pandoc.toml
           [build]
-          image = "ghcr.io/${{ github.repository_owner }}/juvo-poetry-build:${{ github.ref_name }}"
+          image = "ghcr.io/${{ github.repository_owner }}/juvo-poetry-build-pandoc:${{ github.ref_name }}"
 
           [run]
           [[run.images]]
-          image = "ghcr.io/${{ github.repository_owner }}/juvo-poetry-run:${{ github.ref_name }}"
+          image = "ghcr.io/${{ github.repository_owner }}/juvo-poetry-run-pandoc:${{ github.ref_name }}"
           EOF
         working-directory: ${{ github.workspace }}/cnb-components/builders/juvo-builder/
 
@@ -89,14 +90,14 @@ jobs:
           GOOS: linux
 
       - name: Create buildpack package
-        run: tar czf package/juvo-poetry-buildpack.tar.gz bin buildpack.toml
+        run: tar czf package/juvo-poetry-buildpack-pandoc.tar.gz bin buildpack.toml
         working-directory: ${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/
 
       - name: Copy buildpack package
-        run: cp "${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/package/juvo-poetry-buildpack.tar.gz" .
+        run: cp "${{ github.workspace }}/cnb-components/buildpacks/juvo-poetry-buildpack/package/juvo-poetry-buildpack-pandoc.tar.gz" .
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "juvo-poetry-buildpack.tar.gz"
+          artifacts: "juvo-poetry-buildpack-pandoc.tar.gz"
 
