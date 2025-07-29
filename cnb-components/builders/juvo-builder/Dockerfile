@@ -1,4 +1,4 @@
-FROM python:3.12.8-slim-bookworm AS base
+FROM python:3.13-slim-bookworm AS base
 
 # Each stack needs an identifier. This is used by the CNB framework to
 # determine compatibility among components, for example, matching the build
@@ -22,6 +22,7 @@ RUN apt-get update && \
     apt-get install -y libncursesw5-dev libgdbm-dev libc6-dev && \
     apt-get install -y libzmq3-dev && \
     apt-get install -y zlib1g-dev libssl-dev openssl libffi-dev && \
+    apt-get install -y pandoc && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip --no-cache-dir install "poetry==1.8.4"

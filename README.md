@@ -23,3 +23,4 @@
 ## Maintainers
 
 * Diego Balseiro <dbalseiro@stackbuilders.com>
+* Brad James <bwjames@hollandhart.com>
