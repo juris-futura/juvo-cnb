@@ -3,8 +3,7 @@ name: Release
 
 on:
   push:
-    tags: 
-      - "v*"
+    tags: "*"
 
 concurrency:
   group: release-${{ github.ref }}
@@ -48,11 +47,7 @@ jobs:
         run: |
           for TARGET in build run; do
             ARTIFACT="ghcr.io/${{ github.repository_owner }}/juvo-poetry-$TARGET:${{ github.ref_name }}"
-            docker buildx build . \
-              --build-arg INSTALL_PANDOC=false \
-              -t $ARTIFACT \
-              --target $TARGET \
-              --push
+            docker buildx build . -t $ARTIFACT --target $TARGET --push
           done
         working-directory: ${{ github.workspace }}/cnb-components/builders/juvo-builder/
 
